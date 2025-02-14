@@ -11,9 +11,9 @@ import java.util.List;
 public class ProductRepository {
     private List<Product> productData = new ArrayList<>();
 
-    public Product create(Product: product) {
+    public Product create(Product product) {
         productData.add(product);
-        return product
+        return product;
     }
 
     public Iterator<Product> findAll() {
