@@ -22,6 +22,9 @@ class ProductRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        // This method is executed before each test case.
+        // It is typically used to initialize test data or reset the state of dependencies.
+        // Currently, it is empty because no setup is needed before running the tests.
     }
 
     @Test
