@@ -10,11 +10,16 @@ jobs:
     name: SonarCloud Scan
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: read
+      security-events: write  # Required for GitHub Code Scanning Alerts
+
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
@@ -34,5 +39,5 @@ jobs:
       - name: Build and Analyze with SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run:
+        run: |
           ./gradlew build sonar --info
