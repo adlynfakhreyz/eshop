@@ -16,7 +16,7 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService service;
-    private static final String PRODUCTLISTREDIRECTION = "redirect:/product/list";
+    private static final String REDIRECT_PRODUCT_LIST = "redirect:/product/list";
 
     // Constructor Injection
     @Autowired
@@ -37,7 +37,7 @@ public class ProductController {
         }
 
         service.create(product);
-        return PRODUCTLISTREDIRECTION;
+        return REDIRECT_PRODUCT_LIST;
     }
     @GetMapping("/list")
     public String productListPage(Model model) {
@@ -56,12 +56,12 @@ public class ProductController {
     @PostMapping("/edit")
     public String editProductPost(@ModelAttribute Product product) {
         service.update(product);
-        return PRODUCTLISTREDIRECTION;
+        return REDIRECT_PRODUCT_LIST;
     }
 
     @GetMapping("/delete/{id}")
     public String deleteProduct(@PathVariable String id) {
         service.delete(id);
-        return PRODUCTLISTREDIRECTION;
+        return REDIRECT_PRODUCT_LIST;
     }
 }
