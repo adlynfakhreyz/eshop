@@ -1,7 +1,5 @@
 # Adv-Prog
 
----
-
 ### Name: Andi Muhammad Adlyn Fakhreyza Khairi Putra
 ### NPM: 2306241713
 
@@ -15,16 +13,12 @@
 
 ## Sections:
 
----
-
 - [Module 1](#module-1)
 - [Module 2](#module-2)
 
 ---
 
 ## Module 1
-
----
 
 ### Reflection 1
 After implementing the edit and delete features in this Spring Boot application, I have applied several clean code principles and best practices in software development:
@@ -105,8 +99,6 @@ When tasked with creating another functional test suite to verify the number of 
 ---
 
 ## Module 2
-
----
 
 ### Reflection: CI/CD Implementation and Code Quality Fixes
 
