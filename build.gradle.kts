@@ -87,8 +87,16 @@ tasks.test {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
+
+    reports {
+        xml.required.set(true)  // Enable XML report for SonarCloud
+        html.required.set(true) // Optional: Enables HTML report for local debugging
+        csv.required.set(false)
+    }
 }
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
+
+
