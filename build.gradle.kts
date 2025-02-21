@@ -91,7 +91,6 @@ tasks.jacocoTestReport {
     reports {
         xml.required.set(true)  // Enable XML report for SonarCloud
         html.required.set(true) // Optional: Enables HTML report for local debugging
-        csv.required.set(false)
     }
 }
 
