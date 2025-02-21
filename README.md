@@ -2,14 +2,27 @@
 
 ---
 
-### Name: Andi Muhammad Adlyn Fakhreyza Khairi Putra  
+### Name: Andi Muhammad Adlyn Fakhreyza Khairi Putra
 ### NPM: 2306241713
 
 ---
 
+## Deployment
+
+[![Deploy](https://img.shields.io/badge/Live-Demo-blue)](https://decent-wrennie-adlynfakhreyz-1d68e148.koyeb.app/)
+
+---
+
 ## Sections:
-- [Reflection 1](#reflection-1)
-- [Reflection 2](#reflection-2)
+
+---
+
+- [Module 1](#module-1)
+- [Module 2](#module-2)
+
+---
+
+## Module 1
 
 ---
 
@@ -58,9 +71,9 @@ After implementing unit tests in this project, I gained several important insigh
 - There is no fixed rule for the ideal number of unit tests.
 - The need for unit tests depends on the complexity of the program.
 - The most important thing is ensuring that tests cover:
-    - The main functions of the program
-    - Possible edge cases
-    - Various usage scenarios
+  - The main functions of the program
+  - Possible edge cases
+  - Various usage scenarios
 
 #### Understanding Code Coverage:
 - 100% code coverage does not guarantee that the program is free from bugs.
@@ -77,9 +90,9 @@ When tasked with creating another functional test suite to verify the number of 
 
 ##### Proposed Solution:
 - Create a base test class that contains:
-    - Common setup procedures
-    - Frequently used instance variables
-    - Reusable utility methods
+  - Common setup procedures
+  - Frequently used instance variables
+  - Reusable utility methods
 - Have specific test classes inherit from the base class, focusing only on the unique test cases for that feature.
 
 ##### Benefits of This Approach:
@@ -88,5 +101,55 @@ When tasked with creating another functional test suite to verify the number of 
 - Simplifies the addition of new test cases.
 - Ensures consistency across test suites.
 - Eases the process of updating setup procedures.
+
+---
+
+## Module 2
+
+---
+
+### Reflection: CI/CD Implementation and Code Quality Fixes
+
+#### Code Quality Issues Fixed and Strategy
+During the exercise, I addressed several code quality issues identified by tools like SonarCloud. Below are the issues and the strategies I used to fix them:
+
+1. **Grouping Dependencies by Their Destination**
+  - **Issue**: Dependencies in `build.gradle.kts` were not grouped logically, making it harder to maintain and understand.
+  - **Fix**: I grouped the dependencies together for better readability and maintainability.
+  - **Strategy**: Logical grouping of dependencies improves code organization and makes it easier to manage dependencies in the future.
+
+2. **Using Constructor Injection Instead of Field Injection**
+  - **Issue**: Field injection with `@Autowired` was used in `ProductServiceImpl.java` and `ProductController.java`, which is less testable and violates best practices.
+  - **Fix**: I replaced field injection with constructor injection.
+  - **Strategy**: Constructor injection improves testability, ensures immutability, and aligns with Spring's best practices.
+
+3. **Adding Comments to Empty Methods**
+  - **Issue**: Empty methods like `contextLoads()` and `setUp()` lacked explanations, which could confuse future developers.
+  - **Fix**: I added nested comments to explain why these methods were empty.
+  - **Strategy**: Adding comments ensures clarity and maintains documentation standards.
+
+4. **Removing Unnecessary Exception Declarations**
+  - **Issue**: Some Test methods in unit and functional tests unnecessarily declared `throws Exception`.
+  - **Fix**: I removed the `throws Exception` declaration since it was not needed.
+  - **Strategy**: Removing unnecessary code reduces clutter and improves readability.
+
+---
+
+#### CI/CD Workflow Reflection
+In my opinion the current implementation meets the definition of **Continuous Integration (CI)** and **Continuous Deployment (CD)** at least for these reasons:
+
+1. **Continuous Integration (CI)**
+  - The CI pipeline (e.g., `ci.yml`) runs unit tests automatically on every push or pull request, ensuring that new changes do not break existing functionality.
+  - Static code analysis tools like SonarCloud are integrated into the workflow to detect bugs, vulnerabilities, and maintainability issues early in the development process.
+  - The pipeline ensures that the app is tested in a standardized environment (e.g., Java 21 on Ubuntu), reducing inconsistencies and environment-specific issues.
+
+2. **Continuous Deployment (CD)**
+  - The deployment process is automated, with changes to the `main` branch triggering a deployment to the PaaS (e.g., Koyeb).
+  - The pipeline ensures that only code that passes all tests and quality checks is deployed, preventing broken code from reaching production.
+  - Every commit follows the same automated steps, eliminating human errors and ensuring consistency in the deployment process.
+
+3. **Stability and Reliability**
+  - If any test fails or if the code quality does not meet the defined standards, the deployment is halted, ensuring that only stable and reliable code is deployed.
+  - Tools like Scorecard and SonarCloud ensure that security and code quality are maintained throughout the development lifecycle.
 
 ---
