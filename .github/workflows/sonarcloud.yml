@@ -1,49 +1,38 @@
-name: SonarCloud analysis
+name: SonarCloud Code Analysis
 
 on:
-  push: {}         # Trigger on every push to every branch
-  pull_request: {} # Trigger on every pull request
-  workflow_dispatch:
-
-permissions:
-  pull-requests: read  # Allows SonarCloud to decorate PRs with analysis results
+  push:
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  Analysis:
+  sonarcloud:
+    name: SonarCloud Scan
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout the repository
-        uses: actions/checkout@v4  # Ensures code is pulled before analysis
-
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
           distribution: 'temurin'
           java-version: '21'
-          cache: 'gradle'
 
-      - name: Grant execute permission to Gradle
-        run: chmod +x ./gradlew
-
-      - name: Run tests with JaCoCo
-        run: ./gradlew clean build test jacocoTestReport
-
-      - name: Upload JaCoCo coverage report
-        uses: actions/upload-artifact@v4
+      - name: Cache SonarCloud packages
+        uses: actions/cache@v4
         with:
-          name: jacoco-report
-          path: build/reports/jacoco/test/jacocoTestReport.xml
+          path: ~/.sonar/cache
+          key: ${{ runner.os }}-sonar
+          restore-keys: ${{ runner.os }}-sonar
 
-      - name: Run SonarCloud Analysis
-        uses: SonarSource/sonarcloud-github-action@v2
+      - name: Add gradlew permission
+        run: chmod +x gradlew
+
+      - name: Build and Analyze with SonarCloud
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=adlynfakhreyz_eshop
-            -Dsonar.organization=adlynfakhreyz
-            -Dsonar.sources=src/main/java
-            -Dsonar.tests=src/test/java
-            -Dsonar.java.binaries=build/classes/java/main
-            -Dsonar.coverage.jacoco.xmlReportPaths=build/reports/jacoco/test/jacocoTestReport.xml
+        run:
+          ./gradlew build sonar --info
