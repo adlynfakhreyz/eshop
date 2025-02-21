@@ -4,7 +4,6 @@ import id.ac.ui.cs.advprog.eshop.model.Product;
 import id.ac.ui.cs.advprog.eshop.repository.ProductRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -85,7 +84,6 @@ class ProductServiceImplTest {
 
     @Test
     void testUpdateProduct_Success() {
-        Product product = new Product("id-1", "Laptop", 10);
         Product updatedProduct = new Product("id-1", "Updated Laptop", 15);
 
         when(productRepository.update(updatedProduct)).thenReturn(updatedProduct);
