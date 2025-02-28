@@ -79,7 +79,7 @@ class CreateProductFunctionalTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".text-danger")));
 
-        assertTrue(errorMessage.getText().contains("Product name is required"));
+        assertTrue(errorMessage.getText().contains("Name is required"));
         assertTrue(driver.getCurrentUrl().contains("/product/create"));
     }
 
@@ -99,7 +99,7 @@ class CreateProductFunctionalTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".text-danger")));
 
-        assertTrue(errorMessage.getText().contains("Product quantity must be greater than or equal to 0"));
+        assertTrue(errorMessage.getText().contains("Quantity must be greater than or equal to 0"));
         assertTrue(driver.getCurrentUrl().contains("/product/create"));
     }
 
@@ -117,7 +117,7 @@ class CreateProductFunctionalTest {
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         WebElement errorMessage = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".text-danger")));
 
-        assertTrue(errorMessage.getText().contains("Product quantity is required"));
+        assertTrue(errorMessage.getText().contains("Quantity is required"));
         assertTrue(driver.getCurrentUrl().contains("/product/create"));
     }
 }
