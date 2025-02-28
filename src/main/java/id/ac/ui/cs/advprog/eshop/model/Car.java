@@ -4,15 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class Car extends BaseEntity {
+public class Car extends AbstractItem {
     private String carColor;
 
     public Car() {
         super();
     }
 
-    public Car(String id, String name, int quantity, String carColor) {
-        super(id, name, quantity);
+    public Car(String name, int quantity, String carColor) {
+        super(name, quantity);
         this.carColor = carColor;
     }
 }

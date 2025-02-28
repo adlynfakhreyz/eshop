@@ -4,12 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter @Setter
-public class Product extends BaseEntity {
+public class Product extends AbstractItem {
     public Product() {
         super();
     }
 
-    public Product(String id, String name, int quantity) {
-        super(id, name, quantity);
+    public Product(String name, int quantity) {
+        super(name, quantity);
     }
 }
