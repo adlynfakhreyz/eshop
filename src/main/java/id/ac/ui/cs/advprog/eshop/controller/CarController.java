@@ -92,8 +92,8 @@ public class CarController extends ItemController<Car> {
         return getRedirectToList();
     }
 
-    @PostMapping("/deleteCar/{id}")
-    public String deleteCar(@PathVariable String id) {
+    @PostMapping("/deleteCar")
+    public String deleteCar(@RequestParam("id") String id) {
         service.delete(id);
         return getRedirectToList();
     }

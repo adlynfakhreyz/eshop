@@ -92,8 +92,8 @@ public class ProductController extends ItemController<Product> {
         return getRedirectToList();
     }
 
-    @GetMapping("/delete/{id}")
-    public String deleteProduct(@PathVariable String id) {
+    @PostMapping("/delete")
+    public String deleteProduct(@RequestParam("id") String id) {
         service.delete(id);
         return getRedirectToList();
     }
