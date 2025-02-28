@@ -72,11 +72,11 @@ class ProductRepositoryTest {
     @Test
     void testSearchById_ProductExists() {
         // Add a product to the repository
-        Product product = new Product("p-101", "Gadget X", 5);
+        Product product = new Product("Gadget X", 5);
         productRepository.create(product);
 
         // Search for the added product
-        Product retrieved = productRepository.findById("p-101");
+        Product retrieved = productRepository.findById(product.getId());
 
         // Validate that the product was found successfully
         assertNotNull(retrieved);
@@ -95,13 +95,13 @@ class ProductRepositoryTest {
     @Test
     void testSearchById_AmongMultipleEntries() {
         // Insert multiple products to simulate a real-case scenario
-        Product firstProduct = new Product("p-202", "Item Alpha", 8);
-        Product secondProduct = new Product("p-303", "Item Beta", 15);
+        Product firstProduct = new Product("Item Alpha", 8);
+        Product secondProduct = new Product("Item Beta", 15);
         productRepository.create(firstProduct);
         productRepository.create(secondProduct);
 
         // Attempt to find the second product
-        Product retrieved = productRepository.findById("p-303");
+        Product retrieved = productRepository.findById(secondProduct.getId());
 
         // Ensure the correct product is returned
         assertNotNull(retrieved);
@@ -111,12 +111,12 @@ class ProductRepositoryTest {
     @Test
     void testUpdateProduct_Successful() {
         // Add a product to the repository
-        Product product = new Product("p-100", "Gizmo A", 5);
+        Product product = new Product("Gizmo A", 5);
         productRepository.create(product);
 
         // Update the existing product
-        Product updatedProduct = new Product("p-100", "Gizmo A Pro", 12);
-        Product result = productRepository.update(updatedProduct);
+        Product updatedProduct = new Product("Gizmo A Pro", 12);
+        Product result = productRepository.update(product.getId(), updatedProduct);
 
         // Validate the update was successful
         assertNotNull(result);
@@ -127,8 +127,8 @@ class ProductRepositoryTest {
     @Test
     void testUpdateProduct_NotPresent() {
         // Attempt to update a product that doesn't exist
-        Product updatedProduct = new Product("p-999", "Nonexistent Gadget", 25);
-        Product result = productRepository.update(updatedProduct);
+        Product updatedProduct = new Product("Nonexistent Gadget", 25);
+        Product result = productRepository.update(updatedProduct.getId(), updatedProduct);
 
         // The update should return null since the product is not found
         assertNull(result);
@@ -137,14 +137,14 @@ class ProductRepositoryTest {
     @Test
     void testUpdateProduct_MultipleEntries() {
         // Add multiple products so that the update happens in the middle of the list
-        Product product1 = new Product("p-101", "Gadget X", 8);
-        Product product2 = new Product("p-102", "Gadget Y", 16);
+        Product product1 = new Product("Gadget X", 8);
+        Product product2 = new Product("Gadget Y", 16);
         productRepository.create(product1);
         productRepository.create(product2);
 
         // Update the second product in the list
-        Product updatedProduct2 = new Product("p-102", "Gadget Y Plus", 22);
-        Product result = productRepository.update(updatedProduct2);
+        Product updatedProduct2 = new Product("Gadget Y Plus", 22);
+        Product result = productRepository.update(product2.getId(), updatedProduct2);
 
         // Validate the update was applied correctly
         assertNotNull(result);
@@ -152,7 +152,7 @@ class ProductRepositoryTest {
         assertEquals(22, result.getQuantity());
 
         // Ensure the first product remains unchanged
-        Product found1 = productRepository.findById("p-101");
+        Product found1 = productRepository.findById(product1.getId());
         assertNotNull(found1);
         assertEquals("Gadget X", found1.getName());
     }
@@ -160,9 +160,9 @@ class ProductRepositoryTest {
     @Test
     void testDeleteProduct_Successful() {
         // Add a product and then delete it
-        Product product = new Product("p-200", "Widget Alpha", 10);
+        Product product = new Product("Widget Alpha", 10);
         productRepository.create(product);
-        productRepository.delete("p-200");
+        productRepository.delete(product.getId());
 
         // Verify that the repository is now empty
         Iterator<Product> productIterator = productRepository.findAll();
