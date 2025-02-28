@@ -36,9 +36,9 @@ class ProductServiceImplTest {
         Product createdProduct = productService.create(product);
 
         assertNotNull(createdProduct);
-        assertEquals("id-1", createdProduct.getProductId());
-        assertEquals("Laptop", createdProduct.getProductName());
-        assertEquals(10, createdProduct.getProductQuantity());
+        assertEquals("id-1", createdProduct.getId());
+        assertEquals("Laptop", createdProduct.getName());
+        assertEquals(10, createdProduct.getQuantity());
 
         verify(productRepository, times(1)).create(product);
     }
@@ -54,8 +54,8 @@ class ProductServiceImplTest {
         List<Product> products = productService.findAll();
 
         assertEquals(2, products.size());
-        assertEquals("Laptop", products.get(0).getProductName());
-        assertEquals("Phone", products.get(1).getProductName());
+        assertEquals("Laptop", products.get(0).getName());
+        assertEquals("Phone", products.get(1).getName());
 
         verify(productRepository, times(1)).findAll();
     }
@@ -68,7 +68,7 @@ class ProductServiceImplTest {
         Product foundProduct = productService.findById("id-1");
 
         assertNotNull(foundProduct);
-        assertEquals("Laptop", foundProduct.getProductName());
+        assertEquals("Laptop", foundProduct.getName());
         verify(productRepository, times(1)).findById("id-1");
     }
 
@@ -91,8 +91,8 @@ class ProductServiceImplTest {
         Product result = productService.update(updatedProduct);
 
         assertNotNull(result);
-        assertEquals("Updated Laptop", result.getProductName());
-        assertEquals(15, result.getProductQuantity());
+        assertEquals("Updated Laptop", result.getName());
+        assertEquals(15, result.getQuantity());
 
         verify(productRepository, times(1)).update(updatedProduct);
     }

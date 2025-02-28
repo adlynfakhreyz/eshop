@@ -30,20 +30,20 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public Car findById(String carId) {
-        Car car = carRepository.findById(carId);
+    public Car findById(String id) {
+        Car car = carRepository.findById(id);
         return car;
     }
 
     @Override
-    public void update(String carId, Car car) {
+    public void update(String id, Car car) {
         // TODO Auto-generated method stub
-        carRepository.update(carId, car);
+        carRepository.update(id, car);
     }
 
     @Override
-    public void deleteCarById(String carId) {
+    public void deleteCarById(String id) {
         // TODO Auto-generated method stub
-        carRepository.delete(carId);
+        carRepository.delete(id);
     }
 }

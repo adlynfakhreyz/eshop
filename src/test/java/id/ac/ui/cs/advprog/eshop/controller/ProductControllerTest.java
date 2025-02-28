@@ -43,9 +43,9 @@ class ProductControllerTest {
     @Test
     void testCreateProductPost_ValidProduct() throws Exception {
         mockMvc.perform(post("/product/create")
-                        .param("productId", "1")
-                        .param("productName", "Laptop")
-                        .param("productQuantity", "10"))
+                        .param("id", "1")
+                        .param("name", "Laptop")
+                        .param("quantity", "10"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/product/list"));
 
@@ -55,9 +55,9 @@ class ProductControllerTest {
     @Test
     void testCreateProductPost_WithValidationErrors() throws Exception {
         mockMvc.perform(post("/product/create")
-                        .param("productId", "1")
-                        .param("productName", "") // Empty name (invalid)
-                        .param("productQuantity", "-5")) // Negative quantity (invalid)
+                        .param("id", "1")
+                        .param("name", "") // Empty name (invalid)
+                        .param("quantity", "-5")) // Negative quantity (invalid)
                 .andExpect(status().isOk())
                 .andExpect(view().name("createProduct"));
 
@@ -97,9 +97,9 @@ class ProductControllerTest {
     @Test
     void testEditProductPost() throws Exception {
         mockMvc.perform(post("/product/edit")
-                        .param("productId", "1")
-                        .param("productName", "Updated Laptop")
-                        .param("productQuantity", "15"))
+                        .param("id", "1")
+                        .param("name", "Updated Laptop")
+                        .param("quantity", "15"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/product/list"));
 
