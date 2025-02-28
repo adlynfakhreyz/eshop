@@ -15,6 +15,7 @@
 
 - [Module 1](#module-1)
 - [Module 2](#module-2)
+- [Module 3](#module-3)
 
 ---
 
@@ -143,5 +144,133 @@ In my opinion the current implementation meets the definition of **Continuous In
 3. **Stability and Reliability**
   - If any test fails or if the code quality does not meet the defined standards, the deployment is halted, ensuring that only stable and reliable code is deployed.
   - Tools like Scorecard and SonarCloud ensure that security and code quality are maintained throughout the development lifecycle.
+
+---
+
+## Module 3
+
+### Reflection:
+
+---
+
+#### 1. Principles Applied
+In this module, i have applied the SOLID principles to enhance the maintainability and scalability of the codebase. The following principles are implemented:
+
+##### **1. Single Responsibility Principle (SRP)**
+- Each controller is responsible only for handling HTTP requests and delegating the business logic to the service layer.
+- The `ItemController<T>` abstract class centralizes shared logic for managing different item types (Product, Car) while keeping each concrete controller focused on its specific functionality.
+
+##### **2. Open/Closed Principle (OCP)**
+- The `ItemController<T>` base class allows extension through subclassing (e.g., `ProductController` and `CarController`) without modifying the existing logic.
+- The controllers define abstract methods like `getListView()` and `getCreateView()`, allowing subclasses to define their behavior without altering the base class.
+
+##### **3. Liskov Substitution Principle (LSP)**
+- `ProductController` and `CarController` inherit from `ItemController<T>` and can be used interchangeably where `ItemController<T>` is expected, ensuring consistent behavior.
+- The `service.create(product)` and `service.create(car)` calls respect polymorphism, as both rely on the same interface.
+
+##### **4. Interface Segregation Principle (ISP)**
+- The `ItemService<T>` service class ensures that controllers interact with specific services tailored to their domain, avoiding a monolithic interface.
+- The separation of `CarService` and `ProductService` prevents unnecessary dependencies and keeps service interfaces lightweight.
+
+##### **5. Dependency Inversion Principle (DIP)**
+- The controllers depend on abstract services (`ItemService<T>`) rather than concrete implementations, promoting flexibility.
+- The `@Autowired` dependency injection ensures that the controllers receive their required services without tightly coupling them to specific implementations.
+
+---
+#### 2. Advantages of Applying SOLID Principles
+
+##### **1. Improved Maintainability**
+The separation of concerns makes it easier to modify or extend the project.
+
+**Example:** Instead of modifying each controller separately, shared logic is managed in `ItemController<T>`:
+```java
+public abstract class ItemController<T extends AbstractItem> {
+    protected final ItemService<T> service;
+
+    protected ItemController(ItemService<T> service) {
+        this.service = service;
+    }
+    
+    protected abstract String getListView();
+    protected abstract String getCreateView();
+    protected abstract String getEditView();
+    protected abstract String getRedirectToList();
+    protected abstract String getItemAttributeName();
+    protected abstract String getItemsAttributeName();
+}
+```
+
+##### **2. Enhanced Scalability**
+By adhering to OCP and DIP, adding new item types (e.g., Electronics) only requires creating a new controller and service without modifying existing ones.
+
+**Example:** If we introduce `ElectronicsController`, we only need to extend `ItemController<Electronics>` and implement required methods.
+```java
+@Controller
+@RequestMapping("/electronics")
+public class ElectronicsController extends ItemController<Electronics> {
+    @Autowired
+    public ElectronicsController(ElectronicsService service) {
+        super(service);
+    }
+
+    @Override
+    protected String getListView() { return "electronicsList"; }
+    @Override
+    protected String getCreateView() { return "createElectronics"; }
+    @Override
+    protected String getEditView() { return "editElectronics"; }
+    @Override
+    protected String getRedirectToList() { return "redirect:/electronics/list"; }
+    @Override
+    protected String getItemAttributeName() { return "electronics"; }
+    @Override
+    protected String getItemsAttributeName() { return "electronicsList"; }
+}
+```
+
+##### **3. Code Reusability**
+Common operations (CRUD) are shared across controllers via `ItemController<T>`, reducing duplication.
+
+---
+#### 3. Disadvantages of Not Applying SOLID Principles
+
+##### **1. Code Duplication**
+Without an abstract base controller, each entity controller would need to redefine the same CRUD logic repeatedly.
+
+**Example (Without SRP & OCP):**
+```java
+@Controller
+@RequestMapping("/product")
+public class ProductController {
+    private final ProductService service;
+
+    @Autowired
+    public ProductController(ProductService service) {
+        this.service = service;
+    }
+
+    @GetMapping("/create")
+    public String createProductPage(Model model) {
+        model.addAttribute("product", new Product());
+        return "createProduct";
+    }
+    
+    @PostMapping("/create")
+    public String createProduct(@ModelAttribute @Valid Product product, BindingResult result) {
+        if (result.hasErrors()) {
+            return "createProduct";
+        }
+        service.create(product);
+        return "redirect:/product/list";
+    }
+}
+```
+🔴 **Issue:** If another entity like `Car` is introduced, we must write nearly identical code, leading to redundancy.
+
+##### **2. Difficult to Extend and Modify**
+If we don’t use `ItemController<T>`, adding a new entity requires modifying multiple controllers instead of just creating a new subclass.
+
+##### **3. Tight Coupling Between Components**
+If controllers depend directly on concrete services (`ProductService` or `CarService`) instead of abstractions, any change in service implementation will force changes in controllers.
 
 ---
