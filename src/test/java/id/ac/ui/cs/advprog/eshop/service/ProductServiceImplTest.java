@@ -30,13 +30,12 @@ class ProductServiceImplTest {
 
     @Test
     void testCreateProduct() {
-        Product product = new Product("id-1", "Laptop", 10);
+        Product product = new Product("Laptop", 10);
         when(productRepository.create(product)).thenReturn(product);
 
         Product createdProduct = productService.create(product);
 
         assertNotNull(createdProduct);
-        assertEquals("id-1", createdProduct.getId());
         assertEquals("Laptop", createdProduct.getName());
         assertEquals(10, createdProduct.getQuantity());
 
@@ -45,8 +44,8 @@ class ProductServiceImplTest {
 
     @Test
     void testFindAllProducts() {
-        Product product1 = new Product("id-1", "Laptop", 10);
-        Product product2 = new Product("id-2", "Phone", 20);
+        Product product1 = new Product("Laptop", 10);
+        Product product2 = new Product("Phone", 20);
 
         Iterator<Product> mockIterator = Arrays.asList(product1, product2).iterator();
         when(productRepository.findAll()).thenReturn(mockIterator);
@@ -62,14 +61,17 @@ class ProductServiceImplTest {
 
     @Test
     void testFindById_ProductFound() {
-        Product product = new Product("id-1", "Laptop", 10);
-        when(productRepository.findById("id-1")).thenReturn(product);
+        String productId = "id-1"; // Explicitly define the ID
+        Product product = new Product("Laptop", 10);
 
-        Product foundProduct = productService.findById("id-1");
+        when(productRepository.findById(productId)).thenReturn(product); // Use explicit ID
+
+        Product foundProduct = productService.findById(productId); // Use the same ID
 
         assertNotNull(foundProduct);
         assertEquals("Laptop", foundProduct.getName());
-        verify(productRepository, times(1)).findById("id-1");
+
+        verify(productRepository, times(1)).findById(productId); // Use the correct ID
     }
 
     @Test
@@ -84,29 +86,33 @@ class ProductServiceImplTest {
 
     @Test
     void testUpdateProduct_Success() {
-        Product updatedProduct = new Product("id-1", "Updated Laptop", 15);
+        String productId = "id-1";
+        Product updatedProduct = new Product("Updated Laptop", 15);
 
-        when(productRepository.update(updatedProduct)).thenReturn(updatedProduct);
+        when(productRepository.update(productId, updatedProduct)).thenReturn(updatedProduct);
 
-        Product result = productService.update(updatedProduct);
+        Product result = productService.update(productId, updatedProduct);
 
         assertNotNull(result);
         assertEquals("Updated Laptop", result.getName());
         assertEquals(15, result.getQuantity());
 
-        verify(productRepository, times(1)).update(updatedProduct);
+        verify(productRepository, times(1)).update(productId, updatedProduct);
     }
 
     @Test
     void testUpdateProduct_NotFound() {
-        Product updatedProduct = new Product("id-999", "Non-Existent", 50);
-        when(productRepository.update(updatedProduct)).thenReturn(null);
+        String productId = "non-existent-id";
+        Product updatedProduct = new Product("Non-Existent", 50);
 
-        Product result = productService.update(updatedProduct);
+        when(productRepository.update(productId, updatedProduct)).thenReturn(null);
+
+        Product result = productService.update(productId, updatedProduct);
 
         assertNull(result);
-        verify(productRepository, times(1)).update(updatedProduct);
+        verify(productRepository, times(1)).update(productId, updatedProduct);
     }
+
 
     @Test
     void testDeleteProduct() {

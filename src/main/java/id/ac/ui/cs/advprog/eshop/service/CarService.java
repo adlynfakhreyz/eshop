@@ -1,12 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
 import id.ac.ui.cs.advprog.eshop.model.Car;
-import java.util.List;
 
-public interface CarService {
-    public Car create(Car car);
-    public List<Car> findAll();
-    public Car findById(String id);
-    public void update(String id, Car car);
-    public void deleteCarById(String id);
+public interface CarService extends ItemService<Car> {
+    // Can add car-specific methods here later
 }
