@@ -16,6 +16,7 @@
 - [Module 1](#module-1)
 - [Module 2](#module-2)
 - [Module 3](#module-3)
+- [Module 4](#module-4)
 
 ---
 
@@ -274,3 +275,57 @@ If we don’t use `ItemController<T>`, adding a new entity requires modifying mu
 If controllers depend directly on concrete services (`ProductService` or `CarService`) instead of abstractions, any change in service implementation will force changes in controllers.
 
 ---
+
+## Module 4
+
+### Reflection: Test-Driven Development & Refactoring
+
+---
+
+#### 1. Reflecting on TDD Flow
+After implementing the Order and Payment features following the Test-Driven Development workflow, I found this methodology extremely useful for creating maintainable and well-designed code. Reflecting on Percival's self-reflective questions:
+
+##### Correctness
+- The TDD approach provided immediate feedback on whether our features were working as intended. When implementing the Payment feature with various payment methods (especially the voucher code validation), having tests in place before implementation made it easier to verify the business logic was correctly implemented.
+- With TDD, edge cases were identified early. For example, handling invalid statuses in our Order model or validating voucher for payment using voucher methods.
+- The tests made it clear what the expected behavior was, reducing ambiguity in the implementation.
+
+##### Maintainability
+- The RED-GREEN-REFACTOR cycle encouraged clean code from the beginning. During the refactoring phase, extracting the OrderStatus enum improved maintainability without breaking existing functionality.
+- Tests served as documentation that clearly explained the purpose of each class and method, making the codebase more accessible for future developers.
+- The separation of concerns between the model, repository, and service layers was reinforced by the test structure, resulting in more modular code.
+
+##### Productive Workflow
+- Initially, writing tests first seemed to slow down development, but it quickly became apparent that it prevented rework by catching design issues early.
+- Having a test suite made it possible to refactor confidently, knowing that any breaking changes would be immediately flagged.
+- The incremental approach of adding one test at a time kept the development process focused and manageable.
+
+#### 2. Evaluating Tests Against F.I.R.S.T. Principles
+My unit tests generally adhered to the F.I.R.S.T. principles, though there are still areas for improvement:
+
+##### Fast
+- Tests ran quickly as they didn't involve external dependencies like databases.
+- The use of Mockito for service layer tests ensured we weren't slowed down by repository implementations.
+
+##### Independent
+- Each test method focused on testing a single aspect or behavior.
+- Setup code was properly isolated in the @BeforeEach method.
+- However, some tests might have been overly coupled to the implementation details, especially in the repository tests.
+
+##### Repeatable
+- Tests were designed to run in any environment without external dependencies.
+- The use of mocks for dependencies ensured consistent results regardless of the execution environment.
+
+##### Self-Validating
+- All tests had clear assertions that either passed or failed without manual interpretation.
+- Error messages were descriptive, making it easy to understand what went wrong when tests failed.
+
+##### Timely
+- Tests were written before the implementation, following the TDD approach.
+- This ensured that code was designed to be testable from the beginning.
+
+For future test development, I should focus on:
+1. Ensuring better isolation between tests by avoiding shared state
+2. Creating more thorough tests for edge cases, especially for payment validation
+3. Structuring tests to be less implementation-dependent to support refactoring
+4. Improving test names conciseness and consistency to better describe what functionality is being tested
