@@ -54,7 +54,7 @@ class PaymentServiceImplTest {
         order = new Order("order-id", products, 1708560000L, "Bambang");
 
         validVoucherData = new HashMap<>();
-        validVoucherData.put("voucherCode", "ESHOP1234ABCD5678");
+        validVoucherData.put("voucherCode", "ESHOP1234ACD5678");
 
         invalidVoucherData = new HashMap<>();
         invalidVoucherData.put("voucherCode", "INVALID");
