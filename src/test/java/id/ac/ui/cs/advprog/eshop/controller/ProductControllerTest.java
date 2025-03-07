@@ -95,28 +95,28 @@ class ProductControllerTest {
         verify(productService, times(1)).findById(productId);
     }
 
-//    @Test
-//    void testEditProductPost() throws Exception {
-//        // Manually set an ID for the product
-//        Product product = new Product("name", 14);
-//        String productId = "1";
-//        product.setId(productId);
-//
-//        when(productService.findById(productId)).thenReturn(product);
-//
-//        mockMvc.perform(post("/product/edit/" + productId)
-//                        .param("name", "Updated Laptop")
-//                        .param("quantity", "15"))
-//                .andExpect(status().is3xxRedirection())
-//                .andExpect(redirectedUrl("/product/list"));
-//
-//        // Fix the verification: Compare ID correctly and use any(Product.class)
-//        verify(productService, times(1)).update(eq(productId), any(Product.class));
-//    }
+    @Test
+    void testEditProductPost() throws Exception {
+        Product product = new Product("name", 14);
+        String productId = "1";
+        product.setId(productId);
+
+        when(productService.findById(productId)).thenReturn(product);
+
+        mockMvc.perform(post("/product/edit")
+                        .param("id", productId)
+                        .param("name", "Updated Laptop")
+                        .param("quantity", "15"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/product/list"));
+
+        verify(productService, times(1)).update(eq(productId), any(Product.class));
+    }
 
     @Test
     void testDeleteProduct() throws Exception {
-        mockMvc.perform(get("/product/delete/1"))
+        mockMvc.perform(post("/product/delete")
+                        .param("id", "1"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/product/list"));
 
