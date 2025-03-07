@@ -13,10 +13,20 @@ public class Payment {
     private String status;
 
     public Payment(String id, Order order, String method, Map<String, String> paymentData) {
-        // Implementation will be added later
+        if (method == null || method.isEmpty()) {
+            throw new IllegalArgumentException("Payment method cannot be null or empty");
+        }
+
+        this.id = id;
+        this.order = order;
+        this.method = method;
+        this.status = "WAITING";
+        this.paymentData = paymentData;
     }
 
     public void setStatus(String status) {
-        // Implementation will be added later
+        if (status.equals("WAITING") || status.equals("REJECTED") || status.equals("SUCCESS")) {
+            this.status = status;
+        }
     }
 }
