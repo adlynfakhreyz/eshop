@@ -1,5 +1,7 @@
 package id.ac.ui.cs.advprog.eshop.service;
 
+import id.ac.ui.cs.advprog.eshop.enums.PaymentMethod;
+import id.ac.ui.cs.advprog.eshop.enums.PaymentStatus;
 import id.ac.ui.cs.advprog.eshop.model.Order;
 import id.ac.ui.cs.advprog.eshop.model.Payment;
 import id.ac.ui.cs.advprog.eshop.repository.PaymentRepository;
@@ -28,9 +30,9 @@ public class PaymentServiceImpl implements PaymentService {
         Payment payment = new Payment(paymentId, order, method, paymentData);
 
         // Set status based on payment method validation
-        if (method.equals("VOUCHER")) {
+        if (method.equals(PaymentMethod.VOUCHER.getValue())) {
             validateVoucherPayment(payment);
-        } else if (method.equals("CASH_ON_DELIVERY")) {
+        } else if (method.equals(PaymentMethod.CASH_ON_DELIVERY.getValue())) {
             validateCashOnDeliveryPayment(payment);
         }
 
@@ -40,37 +42,33 @@ public class PaymentServiceImpl implements PaymentService {
     private void validateVoucherPayment(Payment payment) {
         String voucherCode = payment.getPaymentData().get("voucherCode");
 
-        // Check if voucher code is valid
-        if (voucherCode != null && voucherCode.length() == 16 &&
-                voucherCode.startsWith("ESHOP") && countNumericChars(voucherCode) == 8) {
-            payment.setStatus("SUCCESS");
-            System.out.println(voucherCode);
-        } else {
-            payment.setStatus("REJECTED");;
-            System.out.println(voucherCode);
-        }
+        // Check if voucher code is valid (16 chars, starts with "ESHOP", has 8 numeric chars)
+        boolean isValid = voucherCode != null &&
+                voucherCode.length() == 16 &&
+                voucherCode.startsWith("ESHOP") &&
+                countNumericChars(voucherCode) == 8;
+
+        payment.setStatus(isValid ?
+                PaymentStatus.SUCCESS.getValue() :
+                PaymentStatus.REJECTED.getValue());
     }
 
     private void validateCashOnDeliveryPayment(Payment payment) {
         String address = payment.getPaymentData().get("address");
         String deliveryFee = payment.getPaymentData().get("deliveryFee");
 
-        if (address != null && !address.isEmpty() &&
-                deliveryFee != null && !deliveryFee.isEmpty()) {
-            payment.setStatus("SUCCESS");
-        } else {
-            payment.setStatus("REJECTED");
-        }
+        boolean isValid = address != null && !address.isEmpty() &&
+                deliveryFee != null && !deliveryFee.isEmpty();
+
+        payment.setStatus(isValid ?
+                PaymentStatus.SUCCESS.getValue() :
+                PaymentStatus.REJECTED.getValue());
     }
 
     private int countNumericChars(String str) {
-        int count = 0;
-        for (char c : str.toCharArray()) {
-            if (Character.isDigit(c)) {
-                count++;
-            }
-        }
-        return count;
+        return (int) str.chars()
+                .filter(Character::isDigit)
+                .count();
     }
 
     @Override
@@ -78,9 +76,9 @@ public class PaymentServiceImpl implements PaymentService {
         payment.setStatus(status);
 
         // Update order status based on payment status
-        if (status.equals("SUCCESS")) {
+        if (status.equals(PaymentStatus.SUCCESS.getValue())) {
             orderService.updateStatus(payment.getOrder().getId(), "SUCCESS");
-        } else if (status.equals("REJECTED")) {
+        } else if (status.equals(PaymentStatus.REJECTED.getValue())) {
             orderService.updateStatus(payment.getOrder().getId(), "FAILED");
         }
 
